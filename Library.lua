@@ -1305,7 +1305,7 @@ do
 
                 KeyPicker.Mode = Mode;
                 
-                if Mode == "Hold" then
+                if Mode == "Always" then
                     KeyPicker:SetValue(true)
                 end
 
