@@ -1306,7 +1306,7 @@ do
                 KeyPicker.Mode = Mode;
                 
                 if Mode == "Hold" then
-                    KeyPicker:DoClick()
+                    KeyPicker:SetValue(true)
                 end
 
                 Label.TextColor3 = Library.AccentColor;
