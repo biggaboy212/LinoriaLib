@@ -1306,7 +1306,8 @@ do
                 KeyPicker.Mode = Mode;
                 
                 if Mode == "Always" then
-                    KeyPicker:DoClick()
+                    Library:SafeCallback(KeyPicker.Callback, true)
+                    Library:SafeCallback(KeyPicker.Clicked, true)
                 end
 
                 Label.TextColor3 = Library.AccentColor;
