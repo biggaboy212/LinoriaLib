@@ -1282,43 +1282,55 @@ do
         end);
 
         Library:GiveSignal(InputService.InputBegan:Connect(function(Input)
-            if (not Picking) then
-                if KeyPicker.Mode == 'Toggle' then
-                    local Key = KeyPicker.Value;
-
-                    if Key == 'MB1' or Key == 'MB2' then
-                        if Key == 'MB1' and Input.UserInputType == Enum.UserInputType.MouseButton1
-                        or Key == 'MB2' and Input.UserInputType == Enum.UserInputType.MouseButton2 then
+            if not Picking then
+                local Key = KeyPicker.Value
+        
+                if KeyPicker.Mode == "Hold" then
+                    if Key == "MB1" or Key == "MB2" then
+                        if Key == "MB1" and Input.UserInputType == Enum.UserInputType.MouseButton1
+                        or Key == "MB2" and Input.UserInputType == Enum.UserInputType.MouseButton2 then
+                            KeyPicker.Toggled = true
+                            KeyPicker:DoClick()
+                        end
+                    elseif Input.UserInputType == Enum.UserInputType.Keyboard and Input.KeyCode.Name == Key then
+                        KeyPicker.Toggled = true
+                        KeyPicker:DoClick()
+                    end
+                elseif KeyPicker.Mode == "Toggle" then
+                    if Key == "MB1" or Key == "MB2" then
+                        if Key == "MB1" and Input.UserInputType == Enum.UserInputType.MouseButton1
+                        or Key == "MB2" and Input.UserInputType == Enum.UserInputType.MouseButton2 then
                             KeyPicker.Toggled = not KeyPicker.Toggled
                             KeyPicker:DoClick()
-                        end;
-                    elseif Input.UserInputType == Enum.UserInputType.Keyboard then
-                        if Input.KeyCode.Name == Key then
-                            KeyPicker.Toggled = not KeyPicker.Toggled;
-                            KeyPicker:DoClick()
-                        end;
-                    end;
-                end;
-
-                KeyPicker:Update();
-            end;
-
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-                local AbsPos, AbsSize = ModeSelectOuter.AbsolutePosition, ModeSelectOuter.AbsoluteSize;
-
-                if Mouse.X < AbsPos.X or Mouse.X > AbsPos.X + AbsSize.X
-                    or Mouse.Y < (AbsPos.Y - 20 - 1) or Mouse.Y > AbsPos.Y + AbsSize.Y then
-
-                    ModeSelectOuter.Visible = false;
-                end;
-            end;
+                        end
+                    elseif Input.UserInputType == Enum.UserInputType.Keyboard and Input.KeyCode.Name == Key then
+                        KeyPicker.Toggled = not KeyPicker.Toggled
+                        KeyPicker:DoClick()
+                    end
+                end
+        
+                KeyPicker:Update()
+            end
         end))
-
+        
         Library:GiveSignal(InputService.InputEnded:Connect(function(Input)
-            if (not Picking) then
-                KeyPicker:Update();
-            end;
-        end))
+            if not Picking and KeyPicker.Mode == "Hold" then
+                local Key = KeyPicker.Value
+        
+                if Key == "MB1" or Key == "MB2" then
+                    if Key == "MB1" and Input.UserInputType == Enum.UserInputType.MouseButton1
+                    or Key == "MB2" and Input.UserInputType == Enum.UserInputType.MouseButton2 then
+                        KeyPicker.Toggled = false
+                        KeyPicker:DoClick()
+                    end
+                elseif Input.UserInputType == Enum.UserInputType.Keyboard and Input.KeyCode.Name == Key then
+                    KeyPicker.Toggled = false
+                    KeyPicker:DoClick()
+                end
+            end
+        
+            KeyPicker:Update()
+        end))        
 
         KeyPicker:Update();
 
